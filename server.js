@@ -1,22 +1,22 @@
 const express = require('express');
 const multer = require('multer');
 const nodemailer = require('nodemailer');
-const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Serve static frontend
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Multer configuration
+// Multer configuration (memory storage)
 const upload = multer({
-  dest: 'uploads/',
+  storage: multer.memoryStorage(),
   limits: { fileSize: 10 * 1024 * 1024 } // 10MB per file
 });
 
-app.post('/send-report', upload.array('photos'), async (req, res) => {
+// API route
+app.post('/api/send-report', upload.array('photos'), async (req, res) => {
   try {
     const { name, surname, truckNumber, trailerNumber, email, location } = req.body;
     const files = req.files || [];
@@ -30,19 +30,19 @@ app.post('/send-report', upload.array('photos'), async (req, res) => {
       return res.status(400).send('At least one photo is required');
     }
 
-    // Nodemailer setup (USE APP PASSWORD)
+    // Nodemailer setup
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: 'reporttruck6@gmail.com',
-        pass: process.env.GMAIL_APP_PASSWORD,
+        pass: 'process.env.GMAIL_APP_PASSWORD',
       }
     });
 
-    // Prepare attachments
+    // Prepare attachments from memory
     const attachments = files.map(file => ({
       filename: file.originalname,
-      path: file.path
+      content: file.buffer
     }));
 
     const emailBody = `
@@ -59,15 +59,6 @@ Location: ${location || '-'}
       subject: `Truck Report: ${truckNumber}`,
       text: emailBody,
       attachments
-    });
-
-    // Clean up uploaded files safely
-    files.forEach(file => {
-      try {
-        fs.unlinkSync(file.path);
-      } catch (err) {
-        console.error("File delete error:", err);
-      }
     });
 
     res.status(200).send('Report sent successfully');

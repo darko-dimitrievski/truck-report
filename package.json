@@ -1,17 +1,16 @@
 {
   "name": "truck-report",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Truck report app with photo uploads",
+  "main": "server.js",
+  "type": "commonjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "vercel dev",
-    "start": "vercel dev"
+    "dev": "node server.js",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
     "express": "^5.2.1",
     "multer": "^2.0.2",
