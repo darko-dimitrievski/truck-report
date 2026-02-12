@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Truck Report</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background:
+                linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)),
+                url('https://images.unsplash.com/photo-1501706362039-c6e80948bbf1?q=80&w=1974&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            padding: 35px;
+            width: 100%;
+            max-width: 520px;
+            border-radius: 18px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            color: white;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        label {
+            font-weight: 500;
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px;
+        }
+
+        input {
+            width: 100%;
+            padding: 11px;
+            border-radius: 10px;
+            border: none;
+            font-size: 14px;
+            margin-bottom: 5px;
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #1e73e8;
+        }
+
+        .location-wrapper {
+            display: flex;
+            gap: 10px;
+        }
+
+        .location-wrapper input {
+            flex: 1;
+        }
+
+        .location-wrapper button {
+            background: #1e73e8;
+            color: white;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: 0.3s;
+        }
+
+        .location-wrapper button:hover {
+            background: #155cc2;
+        }
+
+        .submit-wrapper {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .submit-wrapper input {
+            flex: 1;
+        }
+
+        .submit-wrapper button {
+            flex: 1;
+            background: linear-gradient(135deg, #1e73e8, #0f4fbf);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .submit-wrapper button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        #status {
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .error {
+            color: #ff6b6b;
+        }
+
+        .success {
+            color: #4cd964;
+        }
+
+        #preview {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        #preview img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 600px) {
+            .location-wrapper,
+            .submit-wrapper {
+                flex-direction: column;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Truck Report</h2>
+
+        <form id="reportForm">
+
+            <label>Name *</label>
+            <input type="text" id="name" name="name" required />
+
+            <label>Surname *</label>
+            <input type="text" id="surname" name="surname" required />
+
+            <label>Truck Number *</label>
+            <input type="text" id="truckNumber" name="truckNumber" required />
+
+            <label>Trailer Number *</label>
+            <input type="text" id="trailerNumber" name="trailerNumber" required />
+
+            <label>Location *</label>
+            <div class="location-wrapper">
+                <input type="text" id="location" name="location" placeholder="Click button or type manually" required />
+                <button type="button" id="detectLocation">Use My Location</button>
+            </div>
+
+            <label>Photos *</label>
+            <input type="file" id="photos" name="photos" multiple required accept="image/*" />
+            <div id="preview"></div>
+
+            <div class="submit-wrapper">
+                <input type="email" id="email" name="email" placeholder="Receiver Email *" required />
+                <button type="submit" class="submit-btn">Send Report</button>
+            </div>
+
+            <div id="status"></div>
+
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
