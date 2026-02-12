@@ -35,7 +35,7 @@ app.post('/api/send-report', upload.array('photos'), async (req, res) => {
       service: 'gmail',
       auth: {
         user: 'reporttruck6@gmail.com',
-        pass: 'process.env.GMAIL_APP_PASSWORD',
+        pass: process.env.GMAIL_APP_PASSWORD,
       }
     });
 
