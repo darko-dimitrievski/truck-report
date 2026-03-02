@@ -10,10 +10,18 @@ const PORT = process.env.PORT || 3000;
 // Static frontend
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Multer (memory storage, 10MB per file)
+// Increase express body size limit
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ limit: '100mb', extended: true }));
+
+// Multer (memory storage, 25MB per file, 100MB total)
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 10 * 1024 * 1024 }
+  limits: {
+    fileSize: 25 * 1024 * 1024,   // 25MB per file
+    files: 20,
+    fieldSize: 100 * 1024 * 1024  // 100MB total fields
+  }
 });
 
 // ========================
