@@ -96,7 +96,7 @@ Submitted via Truck Report App
 
     await transporter.sendMail({
       from: '"Truck Report App" <reporttruck6@gmail.com>',
-      to: 'dare_rm@hotmail.com',
+      to: 'roadassist@gavrofreight.com',
       cc: cc.length > 0 ? cc.join(', ') : undefined,
       subject: `Breakdown Report — Truck ${truckNumber} | ${new Date().toLocaleDateString('en-GB')}`,
       text: emailBody,

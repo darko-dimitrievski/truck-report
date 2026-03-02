@@ -49,8 +49,8 @@ When visiting the app in Chrome/Edge/Safari on mobile, users will be prompted to
 
 ## Email Behavior
 
-- Always sends to: `dare_rm@hotmail.com`
-- Optional CC to `ddd@d.com` and/or `ddddd@d.com` via checkboxes
+- Always sends to: `roadassist@gavrofreight.com`
+- Optional CC to `dispatch@gavrofreight.com` and/or `shop@@gavrofreight.com` via checkboxes
 - Subject: `Breakdown Report — Truck [NUMBER] | [DATE]`
 - Photos attached directly to email
 
