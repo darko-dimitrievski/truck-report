@@ -81,10 +81,9 @@ Submitted via Truck Report App
     }));
 
     const recipients = [
-      //'roadassist@gavrofreight.com',
-      //'shop@gavrofreight.com',
-      //'dispatch@gavrofreight.com'
-      'dare_rm@hotmail.com'
+      'roadassist@gavrofreight.com',
+      'shop@gavrofreight.com',
+      'dispatch@gavrofreight.com'
     ];
 
     await transporter.sendMail({
