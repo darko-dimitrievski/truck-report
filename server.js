@@ -84,7 +84,7 @@ Submitted via Truck Report App
       //'roadassist@gavrofreight.com',
       //'shop@gavrofreight.com',
       //'dispatch@gavrofreight.com'
-      'dare_rn@hotmail.com'
+      'dare_rm@hotmail.com'
     ];
 
     await transporter.sendMail({
