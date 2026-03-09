@@ -19,20 +19,15 @@
   <!-- Hero Header -->
   <header class="hero">
     <div class="hero-bg">
-      <img
-        src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=1400&auto=format&fit=crop&q=60"
-        alt=""
-        class="hero-img"
-        loading="eager"
-      />
+      <img src="/icons/cover.png" alt="" class="hero-img" loading="eager" />
       <div class="hero-overlay"></div>
     </div>
     <div class="hero-content">
-    <div class="badge">
-      <img src="/icons/logo.png" alt="Logo" style="width:28px;height:28px;object-fit:contain;vertical-align:middle;margin-right:6px;border-radius:3px;" />
-      FLEET OPERATIONS
-    </div>
-    <h1>BREAKDOWN<br /><span>REPORT</span></h1>
+      <div class="badge">
+        <img src="/icons/logo.png" alt="Logo" style="width:28px;height:28px;object-fit:contain;vertical-align:middle;margin-right:6px;border-radius:3px;" />
+        FLEET OPERATIONS
+      </div>
+      <h1>BREAKDOWN<br /><span>REPORT</span></h1>
       <p class="hero-sub">Submit incident details quickly and accurately</p>
     </div>
   </header>
@@ -53,6 +48,10 @@
           <div class="field">
             <label for="name">Full Name <span class="req">*</span></label>
             <input type="text" id="name" name="name" placeholder="First & Last name" required />
+          </div>
+          <div class="field">
+            <label for="phone">Phone Number <span class="req">*</span></label>
+            <input type="tel" id="phone" name="phone" placeholder="+1234567890" required />
           </div>
         </div>
 
@@ -119,6 +118,13 @@
           <textarea id="safety" name="safety" placeholder="Any hazards, road conditions, injuries, or immediate dangers..." rows="3"></textarea>
         </div>
 
+        <div class="field">
+          <label class="checkbox-option dock-risk">
+            <input type="checkbox" name="dockRisk" value="Yes" />
+            <span>At risk of missing dock time</span>
+          </label>
+        </div>
+
         <!-- Photos -->
         <div class="section-label">
           <span class="section-num">04</span>
@@ -142,19 +148,7 @@
         </div>
 
         <div class="field">
-          <label>Always sent to: <strong>roadassist@gavrofreight.com</strong></label>
-          <div class="checkbox-group">
-            <label class="checkbox-option">
-              <input type="checkbox" name="cc" value="shop@@gavrofreight.com" />
-              <span class="checkmark"></span>
-              <span>shop@@gavrofreight.com</span>
-            </label>
-            <label class="checkbox-option">
-              <input type="checkbox" name="cc" value="dispatch@gavrofreight.com" />
-              <span class="checkmark"></span>
-              <span>dispatch@gavrofreight.com</span>
-            </label>
-          </div>
+          <p>Report will be sent to: <strong>roadassist@gavrofreight.com, shop@gavrofreight.com, dispatch@gavrofreight.com</strong></p>
         </div>
 
         <button type="submit" class="submit-btn" id="submitBtn">

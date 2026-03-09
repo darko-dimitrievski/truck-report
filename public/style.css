@@ -528,3 +528,77 @@ input[type="file"] {
   line-height: 1;
   padding: 0 4px;
 }
+
+/* ========================
+   NEW FIELDS: PHONE & DOCK RISK
+======================== */
+
+/* Phone field aligns with Name in .field-group (already flexed) */
+.field-group .field input[type="tel"] {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  padding: 12px 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.field-group .field input[type="tel"]::placeholder {
+  color: var(--text-muted);
+}
+
+.field-group .field input[type="tel"]:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(232,160,32,0.12);
+}
+
+/* Dock risk checkbox matches other checkboxes but with spacing */
+.checkbox-option.dock-risk {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 400;
+  margin-top: 8px;
+}
+
+.checkbox-option.dock-risk input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.checkbox-option.dock-risk .checkmark {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  position: relative;
+}
+
+.checkbox-option.dock-risk input:checked + .checkmark::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 6px;
+  height: 12px;
+  border: solid var(--accent);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .field-group {
+    flex-direction: column;
+    gap: 14px;
+  }
+}

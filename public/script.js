@@ -141,30 +141,22 @@ form.addEventListener('submit', async (e) => {
   e.preventDefault();
   setStatus('', '');
 
-  // Validate load status
   const loadStatus = form.querySelector('input[name="loadStatus"]:checked');
-  if (!loadStatus) {
-    return setStatus('Please select Loaded or Unloaded.', 'error');
-  }
-
+  if (!loadStatus) return setStatus('Please select Loaded or Unloaded.', 'error');
   if (!locationInput.value.trim()) {
     locationInput.focus();
     return setStatus('Location is required.', 'error');
   }
-
-  if (photosInput.files.length === 0) {
-    return setStatus('Please attach at least one photo.', 'error');
+  if (!form.phone.value.trim()) {
+    form.phone.focus();
+    return setStatus('Phone number is required.', 'error');
   }
+  if (photosInput.files.length === 0) return setStatus('Please attach at least one photo.', 'error');
 
   submitBtn.disabled = true;
   btnText.textContent = 'Sending…';
 
   const formData = new FormData(form);
-
-  // CC checkboxes — collect into array
-  const ccBoxes = form.querySelectorAll('input[name="cc"]:checked');
-  formData.delete('cc');
-  ccBoxes.forEach(cb => formData.append('cc', cb.value));
 
   try {
     const res = await fetch('/api/send-report', {
