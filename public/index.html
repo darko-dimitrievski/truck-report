@@ -1,168 +1,180 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Truck Breakdown Report</title>
-  <meta name="description" content="Submit truck breakdown reports instantly" />
-  <meta name="theme-color" content="#0a0a0a" />
-  <link rel="manifest" href="/manifest.json" />
-  <link rel="apple-touch-icon" href="/icons/logo.png" />
-  <link rel="icon" href="/icons/logo.png" type="image/png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/style.css" />
-</head>
-<body>
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Truck Breakdown Report</title>
+    <meta name="description" content="Submit truck breakdown reports instantly" />
+    <meta name="theme-color" content="#0a0a0a" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/icons/logo.png" />
+    <link rel="icon" href="/icons/logo.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
 
-  <!-- Hero Header -->
-  <header class="hero">
-    <div class="hero-bg">
-      <img src="/icons/cover.webp" alt="" class="hero-img" loading="eager" />
-      <div class="hero-overlay"></div>
-    </div>
-    <div class="hero-content">
-      <div class="badge">
-        <img src="/icons/logo.png" alt="Logo" style="width:28px;height:28px;object-fit:contain;vertical-align:middle;margin-right:6px;border-radius:3px;" />
-        FLEET OPERATIONS
+    <!-- Hero Header -->
+    <header class="hero">
+      <div class="hero-bg">
+        <img src="/icons/cover.webp" alt="" class="hero-img" loading="eager" />
+        <div class="hero-overlay"></div>
       </div>
-      <h1>BREAKDOWN<br /><span>REPORT</span></h1>
-      <p class="hero-sub">Submit incident details quickly and accurately</p>
-    </div>
-  </header>
-
-  <!-- Form Section -->
-  <main class="form-section">
-    <div class="form-card">
-
-      <form id="reportForm" novalidate>
-
-        <!-- Section: Driver Info -->
-        <div class="section-label">
-          <span class="section-num">01</span>
-          <span>Driver Information</span>
+      <div class="hero-content">
+        <div class="badge">
+          <img src="/icons/logo.png" alt="Logo" style="width:28px;height:28px;object-fit:contain;vertical-align:middle;margin-right:6px;border-radius:3px;" />
+          FLEET OPERATIONS
         </div>
+        <h1>BREAKDOWN<br /><span>REPORT</span></h1>
+        <p class="hero-sub">Submit incident details quickly and accurately</p>
+      </div>
+    </header>
 
-        <div class="field-group">
-          <div class="field">
-            <label for="name">Full Name <span class="req">*</span></label>
-            <input type="text" id="name" name="name" placeholder="First & Last name" required />
-          </div>
-          <div class="field">
-            <label for="phone">Phone Number <span class="req">*</span></label>
-            <input type="tel" id="phone" name="phone" placeholder="+1234567890" required />
-          </div>
-        </div>
+    <!-- Form Section -->
+    <main class="form-section">
+      <div class="form-card">
 
-        <div class="field">
-          <label for="location">Location / Address <span class="req">*</span></label>
-          <div class="input-addon">
-            <input type="text" id="location" name="location" placeholder="City, highway, or full address" required />
-            <button type="button" id="detectLocation" class="addon-btn" title="Detect my location">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8" opacity=".3"/></svg>
-            </button>
-          </div>
-        </div>
+        <form id="reportForm" novalidate>
 
-        <!-- Section: Vehicle Info -->
-        <div class="section-label">
-          <span class="section-num">02</span>
-          <span>Vehicle Details</span>
-        </div>
+          <!-- Section: Driver Info -->
+          <div class="section-label">
+            <span class="section-num">01</span>
+            <span>Driver Information</span>
+          </div>
 
-        <div class="field-row">
-          <div class="field">
-            <label for="truckNumber">Truck Number <span class="req">*</span></label>
-            <input type="text" id="truckNumber" name="truckNumber" placeholder="e.g. T-1042" required />
-          </div>
-          <div class="field">
-            <label for="trailerNumber">Trailer Number <span class="req">*</span></label>
-            <input type="text" id="trailerNumber" name="trailerNumber" placeholder="e.g. TR-884" required />
-          </div>
-        </div>
-
-        <div class="field-row">
-          <div class="field">
-            <label for="loadNumber">Load Number</label>
-            <input type="text" id="loadNumber" name="loadNumber" placeholder="e.g. LD-20341" />
-          </div>
-          <div class="field">
-            <label>Load Status <span class="req">*</span></label>
-            <div class="radio-group">
-              <label class="radio-option">
-                <input type="radio" name="loadStatus" value="Loaded" required />
-                <span>Loaded</span>
-              </label>
-              <label class="radio-option">
-                <input type="radio" name="loadStatus" value="Unloaded" />
-                <span>Unloaded</span>
-              </label>
+          <div class="field-group">
+            <div class="field">
+              <label for="name">Full Name <span class="req">*</span></label>
+              <input type="text" id="name" name="name" placeholder="First & Last name" required />
+            </div>
+            <div class="field">
+              <label for="phone">Phone Number <span class="req">*</span></label>
+              <input type="tel" id="phone" name="phone" placeholder="+1234567890" required />
+            </div>
+            <div class="field">
+              <label for="driverEmail">Driver Email <span class="req">*</span></label>
+              <input
+                type="email"
+                id="driverEmail"
+                name="driverEmail"
+                placeholder="driver@email.com"
+                inputmode="email"
+                autocomplete="email"
+                required
+              />
             </div>
           </div>
-        </div>
 
-        <!-- Section: Incident Info -->
-        <div class="section-label">
-          <span class="section-num">03</span>
-          <span>Incident Details</span>
-        </div>
+          <div class="field">
+            <label for="location">Location / Address <span class="req">*</span></label>
+            <div class="input-addon">
+              <input type="text" id="location" name="location" placeholder="City, highway, or full address" required />
+              <button type="button" id="detectLocation" class="addon-btn" title="Detect my location">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8" opacity=".3"/></svg>
+              </button>
+            </div>
+          </div>
 
-        <div class="field">
-          <label for="breakdown">Nature of Breakdown <span class="req">*</span></label>
-          <textarea id="breakdown" name="breakdown" placeholder="Describe what happened — engine, tires, brakes, electrical..." rows="3" required></textarea>
-        </div>
+          <!-- Section: Vehicle Info -->
+          <div class="section-label">
+            <span class="section-num">02</span>
+            <span>Vehicle Details</span>
+          </div>
 
-        <div class="field">
-          <label for="safety">Safety Concerns</label>
-          <textarea id="safety" name="safety" placeholder="Any hazards, road conditions, injuries, or immediate dangers..." rows="3"></textarea>
-        </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="truckNumber">Truck Number <span class="req">*</span></label>
+              <input type="text" id="truckNumber" name="truckNumber" placeholder="e.g. T-1042" required />
+            </div>
+            <div class="field">
+              <label for="trailerNumber">Trailer Number <span class="req">*</span></label>
+              <input type="text" id="trailerNumber" name="trailerNumber" placeholder="e.g. TR-884" required />
+            </div>
+          </div>
 
-        <div class="field">
-          <label class="checkbox-option dock-risk">
-            <input type="checkbox" name="dockRisk" value="Yes" />
-            <span>At risk of missing dock time</span>
-          </label>
-        </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="loadNumber">Load Number</label>
+              <input type="text" id="loadNumber" name="loadNumber" placeholder="e.g. LD-20341" />
+            </div>
+            <div class="field">
+              <label>Load Status <span class="req">*</span></label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input type="radio" name="loadStatus" value="Loaded" required />
+                  <span>Loaded</span>
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="loadStatus" value="Unloaded" />
+                  <span>Unloaded</span>
+                </label>
+              </div>
+            </div>
+          </div>
 
-        <!-- Photos -->
-        <div class="section-label">
-          <span class="section-num">04</span>
-          <span>Photos</span>
-        </div>
+          <!-- Section: Incident Info -->
+          <div class="section-label">
+            <span class="section-num">03</span>
+            <span>Incident Details</span>
+          </div>
 
-        <div class="field">
-          <label for="photos">Attach Photos <span class="req">*</span></label>
-          <label class="file-drop" for="photos" id="fileDrop">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="upload-icon"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            <span id="fileLabel">Tap to select or drag photos here</span>
-          </label>
-          <input type="file" id="photos" name="photos" multiple required accept="image/*" />
-          <div id="preview"></div>
-        </div>
+          <div class="field">
+            <label for="breakdown">Nature of Breakdown <span class="req">*</span></label>
+            <textarea id="breakdown" name="breakdown" placeholder="Describe what happened — engine, tires, brakes, electrical..." rows="3" required></textarea>
+          </div>
 
-        <!-- Send To -->
-        <div class="section-label">
-          <span class="section-num">05</span>
-          <span>Send Report</span>
-        </div>
+          <div class="field">
+            <label for="safety">Safety Concerns</label>
+            <textarea id="safety" name="safety" placeholder="Any hazards, road conditions, injuries, or immediate dangers..." rows="3"></textarea>
+          </div>
 
-        <div class="field">
-          <p>Report will be sent to: <strong>roadassist@gavrofreight.com, shop@gavrofreight.com, dispatch@gavrofreight.com</strong></p>
-        </div>
+          <div class="field">
+            <label class="checkbox-option dock-risk">
+              <input type="checkbox" name="dockRisk" value="Yes" />
+              <span>At risk of missing dock time</span>
+            </label>
+          </div>
 
-        <button type="submit" class="submit-btn" id="submitBtn">
-          <span id="btnText">Submit Report</span>
-          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-        </button>
+          <!-- Photos -->
+          <div class="section-label">
+            <span class="section-num">04</span>
+            <span>Photos</span>
+          </div>
 
-        <div id="status"></div>
+          <div class="field">
+            <label for="photos">Attach Photos <span class="req">*</span></label>
+            <label class="file-drop" for="photos" id="fileDrop">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="upload-icon"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span id="fileLabel">Tap to select or drag photos here</span>
+            </label>
+            <input type="file" id="photos" name="photos" multiple required accept="image/*" />
+            <div id="preview"></div>
+          </div>
 
-      </form>
+          <!-- Send To -->
+          <div class="section-label">
+            <span class="section-num">05</span>
+            <span>Send Report</span>
+          </div>
 
-    </div>
-  </main>
+          <div class="field">
+            <p>Report will be sent to: <strong>roadassist@gavrofreight.com, shop@gavrofreight.com, dispatch@gavrofreight.com</strong></p>
+          </div>
 
-  <script src="/script.js"></script>
-</body>
-</html>
+          <button type="submit" class="submit-btn" id="submitBtn">
+            <span id="btnText">Submit Report</span>
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+
+          <div id="status"></div>
+
+        </form>
+
+      </div>
+    </main>
+
+    <script src="/script.js"></script>
+  </body>
+  </html>

@@ -22,9 +22,11 @@ const upload = multer({
 
 app.post('/api/send-report', upload.array('photos'), async (req, res) => {
   try {
+
     const {
       name,
       phone,
+      driverEmail,
       truckNumber,
       trailerNumber,
       loadNumber,
@@ -37,10 +39,13 @@ app.post('/api/send-report', upload.array('photos'), async (req, res) => {
 
     const files = req.files || [];
 
-    if (!name || !phone || !truckNumber || !trailerNumber || !loadStatus || !location || !breakdown) {
+    if (!name || !phone || !driverEmail || !truckNumber || !trailerNumber || !loadStatus || !location || !breakdown) {
       return res.status(400).send('Missing required fields.');
     }
-    if (files.length === 0) return res.status(400).send('At least one photo is required.');
+
+    if (files.length === 0) {
+      return res.status(400).send('At least one photo is required.');
+    }
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -51,28 +56,41 @@ app.post('/api/send-report', upload.array('photos'), async (req, res) => {
     });
 
     const emailBody = `
-TRUCK BREAKDOWN REPORT
-======================
+    🚛 TRUCK BREAKDOWN REPORT
 
-Driver Name:      ${name}
-Phone:            ${phone}
-Location:         ${location}
+    Truck: ${truckNumber}
+    Location: ${location}
+    Load Status: ${loadStatus}
+    Dock Risk: ${dockRisk === 'Yes' ? '⚠ YES' : 'No'}
 
-Truck Number:     ${truckNumber}
-Trailer Number:   ${trailerNumber}
-Load Number:      ${loadNumber || '-'}
-Load Status:      ${loadStatus}
-At Risk of Missing Dock Time: ${dockRisk === 'Yes' ? 'Yes' : 'No'}
+    ----------------------------------------
 
-Nature of Breakdown:
-${breakdown}
+    👤 DRIVER
+    Name: ${name}
+    Phone: ${phone}
+    Email: ${driverEmail}
 
-Safety Concerns:
-${safety || 'None reported'}
+    ----------------------------------------
 
---
-Submitted via Truck Report App
-`.trim();
+    🚚 VEHICLE
+    Truck Number: ${truckNumber}
+    Trailer Number: ${trailerNumber}
+    Load Number: ${loadNumber || '-'}
+
+    ----------------------------------------
+
+    🔧 BREAKDOWN DETAILS
+    ${breakdown}
+
+    ----------------------------------------
+
+    ⚠ SAFETY CONCERNS
+    ${safety || 'None reported'}
+
+    ----------------------------------------
+
+    Gavro Freight | Breakdown Report System
+    `.trim();
 
     const attachments = files.map(file => ({
       filename: file.originalname,
@@ -89,12 +107,17 @@ Submitted via Truck Report App
     await transporter.sendMail({
       from: '"Truck Report App" <reporttruck6@gmail.com>',
       to: recipients.join(', '),
+
+      // driver receives copy
+      cc: driverEmail || undefined,
+
       subject: `Breakdown Report — Truck ${truckNumber} | ${new Date().toLocaleDateString('en-GB')}`,
       text: emailBody,
       attachments
     });
 
     res.status(200).send('Report sent successfully.');
+
   } catch (err) {
     console.error('SERVER ERROR:', err);
     res.status(500).send('Failed to send report. Please try again.');
