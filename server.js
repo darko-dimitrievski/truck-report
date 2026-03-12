@@ -101,7 +101,9 @@ app.post('/api/send-report', upload.array('photos'), async (req, res) => {
     const recipients = [
       'roadassist@gavrofreight.com',
       'shop@gavrofreight.com',
-      'dispatch@gavrofreight.com'
+      'dispatch@gavrofreight.com',
+      'almclaughlin@gavrofreight.com',
+      'jewel@gavrofreight.com'
     ];
 
     await transporter.sendMail({

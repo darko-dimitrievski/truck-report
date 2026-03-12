@@ -602,3 +602,59 @@ input[type="file"] {
     gap: 14px;
   }
 }
+
+.send-info {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-left: 4px solid #f59e0b;
+  padding: 16px 18px;
+  border-radius: 10px;
+  margin-bottom: 18px;
+}
+
+.send-info-header {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  color: #f59e0b;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.info-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  stroke: currentColor;
+  fill: none;
+}
+
+.send-info-emails {
+  font-size: 13px;
+  color: #cfcfcf;
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+.send-info {
+  background: rgba(255,255,255,0.04);
+  border-left: 4px solid #f59e0b;
+  padding: 16px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.send-info-header {
+  font-weight: 600;
+  color: #f59e0b;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.send-info-emails {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  color: #d6d6d6;
+}
