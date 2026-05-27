@@ -428,9 +428,12 @@ input[type="file"] {
 .submit-btn:active { transform: translateY(0); }
 
 .submit-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.4;
   cursor: not-allowed;
   transform: none;
+  box-shadow: none;
+  background: linear-gradient(135deg, #666, #444);
+  color: #aaa;
 }
 
 .btn-icon {

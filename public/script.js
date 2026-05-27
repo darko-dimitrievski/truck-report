@@ -57,6 +57,97 @@ function loadDriverInfo() {
 loadDriverInfo();
 
 // ========================
+// FORM VALIDATION
+// ========================
+const requiredFields = {
+  name: nameInput,
+  phone: phoneInput,
+  driverEmail: emailInput,
+  location: locationInput,
+  truckNumber: document.getElementById('truckNumber'),
+  trailerNumber: document.getElementById('trailerNumber'),
+  breakdown: document.getElementById('breakdown')
+};
+
+function validateForm() {
+  // Check all text inputs
+  for (const [fieldName, field] of Object.entries(requiredFields)) {
+    if (!field.value.trim()) return false;
+  }
+
+  // Check load status radio
+  const loadStatus = form.querySelector('input[name="loadStatus"]:checked');
+  if (!loadStatus) return false;
+
+  // Check at least one photo
+  if (photosInput.files.length === 0) return false;
+
+  return true;
+}
+
+function updateSubmitButton() {
+  submitBtn.disabled = !validateForm();
+}
+
+// Add listeners to all required fields
+Object.values(requiredFields).forEach(field => {
+  field.addEventListener('input', updateSubmitButton);
+  field.addEventListener('change', updateSubmitButton);
+});
+
+form.querySelectorAll('input[name="loadStatus"]').forEach(radio => {
+  radio.addEventListener('change', updateSubmitButton);
+});
+
+photosInput.addEventListener('change', () => {
+  renderPreviews(photosInput.files);
+  updateSubmitButton();
+});
+
+// Initial state
+updateSubmitButton();
+
+// ========================
+// IMAGE COMPRESSION
+// ========================
+async function compressImage(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (e) => {
+      const img = new Image();
+      img.src = e.target.result;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let { width, height } = img;
+        
+        // Resize if too large
+        if (width > 2000) {
+          height = (height * 2000) / width;
+          width = 2000;
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        
+        canvas.toBlob(
+          (blob) => {
+            const compressedFile = new File([blob], file.name, {
+              type: 'image/jpeg',
+              lastModified: Date.now()
+            });
+            resolve(compressedFile);
+          },
+          'image/jpeg',
+          0.6
+        );
+      };
+    };
+  });
+}
+
+// ========================
 // Image preview
 // ========================
 photosInput.addEventListener('change', () => {
@@ -116,6 +207,7 @@ fileDrop.addEventListener('drop', e => {
   if (dt.files.length) {
     photosInput.files = dt.files;
     renderPreviews(dt.files);
+    updateSubmitButton();
   }
 });
 
@@ -188,9 +280,28 @@ form.addEventListener('submit', async e => {
     return setStatus('Attach at least one photo.', 'error');
 
   submitBtn.disabled = true;
-  btnText.textContent = 'Sending...';
+  btnText.textContent = 'Compressing images...';
 
   const formData = new FormData(form);
+
+  // Compress images before sending
+  try {
+    const compressedFiles = [];
+    for (const file of photosInput.files) {
+      const compressed = await compressImage(file);
+      compressedFiles.push(compressed);
+    }
+
+    // Remove original photos and add compressed ones
+    formData.delete('photos');
+    compressedFiles.forEach(file => {
+      formData.append('photos', file);
+    });
+  } catch (err) {
+    return setStatus('Image compression failed. Try with smaller files.', 'error');
+  }
+
+  btnText.textContent = 'Sending...';
 
   try {
 
