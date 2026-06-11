@@ -321,7 +321,13 @@ form.addEventListener('submit', async e => {
 
     } else {
 
-      setStatus(text || 'Something went wrong', 'error');
+      if (text === 'EMAIL_AUTH_FAILURE') {
+        setStatus('Email authentication failed. The server cannot log in to the mail account — please contact IT support.', 'error');
+      } else if (text === 'EMAIL_CONNECTION_FAILURE') {
+        setStatus('Could not connect to the mail server. Check your internet connection and try again.', 'error');
+      } else {
+        setStatus(text || 'Something went wrong', 'error');
+      }
     }
 
   } catch {

@@ -122,7 +122,18 @@ app.post('/api/send-report', upload.array('photos'), async (req, res) => {
 
   } catch (err) {
     console.error('SERVER ERROR:', err);
-    res.status(500).send('Failed to send report. Please try again.');
+
+    // SMTP authentication failure
+    if (err.code === 'EAUTH' || (err.responseCode >= 530 && err.responseCode <= 538)) {
+      return res.status(502).send('EMAIL_AUTH_FAILURE');
+    }
+
+    // SMTP connection / timeout
+    if (err.code === 'ECONNECTION' || err.code === 'ETIMEDOUT' || err.code === 'ESOCKET') {
+      return res.status(502).send('EMAIL_CONNECTION_FAILURE');
+    }
+
+    res.status(500).send('Failed to send report. Contact the administrator or try again later.');
   }
 });
 
