@@ -150,10 +150,6 @@ async function compressImage(file) {
 // ========================
 // Image preview
 // ========================
-photosInput.addEventListener('change', () => {
-  renderPreviews(photosInput.files);
-});
-
 function renderPreviews(files) {
 
   preview.innerHTML = '';
