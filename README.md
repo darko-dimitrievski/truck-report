@@ -54,6 +54,14 @@ When visiting the app in Chrome/Edge/Safari on mobile, users will be prompted to
 - Subject: `Breakdown Report — Truck [NUMBER] | [DATE]`
 - Photos attached directly to email
 
+## Upload Limits
+
+The backend has hardcoded upload limits tuned for Vercel Free request-size limits:
+
+- Max per photo: 1 MB
+- Max photos per report: 4
+- Max combined photo size: 4 MB
+
 ## Icons
 
 Place your own 192×192 and 512×512 PNG icons in `public/icons/` named `icon-192.png` and `icon-512.png`.

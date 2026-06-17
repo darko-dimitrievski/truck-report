@@ -6,6 +6,13 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const MAX_FILE_SIZE_MB = 1;
+const MAX_FILES = 4;
+const MAX_TOTAL_ATTACHMENTS_MB = 4;
+
+const bytesFromMb = (mb) => mb * 1024 * 1024;
+const maxFileSizeBytes = bytesFromMb(MAX_FILE_SIZE_MB);
+const maxTotalAttachmentsBytes = bytesFromMb(MAX_TOTAL_ATTACHMENTS_MB);
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json({ limit: '4.5mb' }));
@@ -14,8 +21,8 @@ app.use(express.urlencoded({ limit: '4.5mb', extended: true }));
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 4 * 1024 * 1024,
-    files: 20,
+    fileSize: maxFileSizeBytes,
+    files: MAX_FILES,
     fieldSize: 4.5 * 1024 * 1024
   }
 });
@@ -38,6 +45,7 @@ app.post('/api/send-report', upload.array('photos'), async (req, res) => {
     } = req.body;
 
     const files = req.files || [];
+    const totalAttachmentBytes = files.reduce((sum, file) => sum + file.size, 0);
 
     if (!name || !phone || !driverEmail || !truckNumber || !trailerNumber || !loadStatus || !location || !breakdown) {
       return res.status(400).send('Missing required fields.');
@@ -45,6 +53,10 @@ app.post('/api/send-report', upload.array('photos'), async (req, res) => {
 
     if (files.length === 0) {
       return res.status(400).send('At least one photo is required.');
+    }
+
+    if (totalAttachmentBytes > maxTotalAttachmentsBytes) {
+      return res.status(400).send(`Total photo size is too large. Keep all photos under ${MAX_TOTAL_ATTACHMENTS_MB} MB combined.`);
     }
 
     const transporter = nodemailer.createTransport({
@@ -102,7 +114,6 @@ app.post('/api/send-report', upload.array('photos'), async (req, res) => {
       'roadassist@gavrofreight.com',
       'shop@gavrofreight.com',
       'dispatch@gavrofreight.com',
-      'almclaughlin@gavrofreight.com',
       'jewel@gavrofreight.com'
     ];
 
@@ -139,6 +150,26 @@ app.post('/api/send-report', upload.array('photos'), async (req, res) => {
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).send(`A photo is too large. Max per photo: ${MAX_FILE_SIZE_MB} MB.`);
+    }
+
+    if (err.code === 'LIMIT_FILE_COUNT') {
+      return res.status(400).send(`Too many photos. Max allowed: ${MAX_FILES}.`);
+    }
+
+    if (err.code === 'LIMIT_FIELD_SIZE') {
+      return res.status(400).send('One of the form fields is too large.');
+    }
+
+    return res.status(400).send(`Upload failed: ${err.message}`);
+  }
+
+  return next(err);
 });
 
 app.listen(PORT, () => console.log(`✅ Server running on http://localhost:${PORT}`));

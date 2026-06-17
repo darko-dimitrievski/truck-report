@@ -21,6 +21,11 @@ const fileDrop = document.getElementById('fileDrop');
 const submitBtn = document.getElementById('submitBtn');
 const btnText = document.getElementById('btnText');
 
+const MAX_FILES = 4;
+const MAX_FILE_SIZE_BYTES = 1024 * 1024;
+const MAX_TOTAL_SIZE_BYTES = 4 * 1024 * 1024;
+const TARGET_FILE_SIZE_BYTES = 900 * 1024;
+
 // driver fields
 const nameInput = document.getElementById('name');
 const phoneInput = document.getElementById('phone');
@@ -99,7 +104,26 @@ form.querySelectorAll('input[name="loadStatus"]').forEach(radio => {
   radio.addEventListener('change', updateSubmitButton);
 });
 
+function enforceClientFileCount(fileList) {
+  const files = Array.from(fileList);
+
+  if (files.length <= MAX_FILES) {
+    return files;
+  }
+
+  setStatus(`Only ${MAX_FILES} photos are allowed. Extra photos were skipped.`, 'error');
+  return files.slice(0, MAX_FILES);
+}
+
 photosInput.addEventListener('change', () => {
+  const limitedFiles = enforceClientFileCount(photosInput.files);
+
+  if (limitedFiles.length !== photosInput.files.length) {
+    const dataTransfer = new DataTransfer();
+    limitedFiles.forEach(file => dataTransfer.items.add(file));
+    photosInput.files = dataTransfer.files;
+  }
+
   renderPreviews(photosInput.files);
   updateSubmitButton();
 });
@@ -110,40 +134,73 @@ updateSubmitButton();
 // ========================
 // IMAGE COMPRESSION
 // ========================
-async function compressImage(file) {
-  return new Promise((resolve) => {
+async function imageFileToBlob(file, maxWidth, quality) {
+  return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
+
+    reader.onerror = () => reject(new Error('Could not read image.'));
+
     reader.onload = (e) => {
       const img = new Image();
       img.src = e.target.result;
+
+      img.onerror = () => reject(new Error('Could not decode image.'));
+
       img.onload = () => {
         const canvas = document.createElement('canvas');
         let { width, height } = img;
-        
-        // Resize if too large
-        if (width > 2000) {
-          height = (height * 2000) / width;
-          width = 2000;
+
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
         }
-        
+
         canvas.width = width;
         canvas.height = height;
         canvas.getContext('2d').drawImage(img, 0, 0, width, height);
-        
+
         canvas.toBlob(
           (blob) => {
-            const compressedFile = new File([blob], file.name, {
-              type: 'image/jpeg',
-              lastModified: Date.now()
-            });
-            resolve(compressedFile);
+            if (!blob) {
+              reject(new Error('Could not compress image.'));
+              return;
+            }
+
+            resolve(blob);
           },
           'image/jpeg',
-          0.6
+          quality
         );
       };
     };
+  });
+}
+
+async function compressImage(file) {
+  const attempts = [
+    { maxWidth: 2000, quality: 0.65 },
+    { maxWidth: 1800, quality: 0.55 },
+    { maxWidth: 1600, quality: 0.5 },
+    { maxWidth: 1400, quality: 0.45 },
+    { maxWidth: 1200, quality: 0.4 },
+    { maxWidth: 1000, quality: 0.35 }
+  ];
+
+  let bestBlob = null;
+
+  for (const attempt of attempts) {
+    const blob = await imageFileToBlob(file, attempt.maxWidth, attempt.quality);
+    bestBlob = blob;
+
+    if (blob.size <= TARGET_FILE_SIZE_BYTES) {
+      break;
+    }
+  }
+
+  return new File([bestBlob], file.name, {
+    type: 'image/jpeg',
+    lastModified: Date.now()
   });
 }
 
@@ -201,8 +258,13 @@ fileDrop.addEventListener('drop', e => {
   const dt = e.dataTransfer;
 
   if (dt.files.length) {
-    photosInput.files = dt.files;
-    renderPreviews(dt.files);
+    const limitedFiles = enforceClientFileCount(dt.files);
+    const dataTransfer = new DataTransfer();
+
+    limitedFiles.forEach(file => dataTransfer.items.add(file));
+    photosInput.files = dataTransfer.files;
+
+    renderPreviews(photosInput.files);
     updateSubmitButton();
   }
 });
@@ -283,8 +345,21 @@ form.addEventListener('submit', async e => {
   // Compress images before sending
   try {
     const compressedFiles = [];
+    let totalCompressedSize = 0;
+
     for (const file of photosInput.files) {
       const compressed = await compressImage(file);
+
+      if (compressed.size > MAX_FILE_SIZE_BYTES) {
+        return setStatus('One photo is still too large after compression. Use smaller images.', 'error');
+      }
+
+      totalCompressedSize += compressed.size;
+
+      if (totalCompressedSize > MAX_TOTAL_SIZE_BYTES) {
+        return setStatus('Photos are too large in total. Use fewer photos or smaller images.', 'error');
+      }
+
       compressedFiles.push(compressed);
     }
 
